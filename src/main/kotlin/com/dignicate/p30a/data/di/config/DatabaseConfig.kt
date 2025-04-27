@@ -11,8 +11,7 @@ object DatabaseConfig {
         val connection: MongoConnectionConfig
 
         init {
-            val env = System.getenv("ENV") ?: "dev"
-            val configFile = File("env/$env/mongo.properties")
+            val configFile = File("env/mongo.properties")
             if (configFile.exists()) {
                 configFile.inputStream().use { properties.load(it) }
             } else {
