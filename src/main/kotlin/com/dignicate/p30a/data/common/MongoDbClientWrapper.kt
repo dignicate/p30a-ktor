@@ -5,6 +5,7 @@ import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import com.mongodb.client.model.Filters
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.toList
 import org.bson.conversions.Bson
 
 class MongoDbClientWrapper(
@@ -27,5 +28,18 @@ class MongoDbClientWrapper(
         val collection = getCollection(collectionName, documentClass)
         val filter: Bson = Filters.eq("_id", id)
         return collection.find(filter).firstOrNull()
+    }
+
+    suspend fun <T : Any> findAll(
+        collectionName: String,
+        documentClass: Class<T>,
+        limit: Int,
+        page: Int
+    ): List<T> {
+        val collection = database.getCollection(collectionName, documentClass)
+        return collection.find()
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .toList()
     }
 }

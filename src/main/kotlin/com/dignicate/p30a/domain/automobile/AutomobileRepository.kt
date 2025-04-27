@@ -1,7 +1,7 @@
 package com.dignicate.p30a.domain.automobile
 
 interface AutomobileRepository {
-    fun getCompanies(limit: Int, page: Int): List<Company>
+    suspend fun getCompanies(limit: Int, page: Int): List<Company>
 }
 
 class MockAutomobileRepository : AutomobileRepository {
@@ -465,7 +465,7 @@ class MockAutomobileRepository : AutomobileRepository {
         )
     }
 
-    override fun getCompanies(limit: Int, page: Int): List<Company> {
+    override suspend fun getCompanies(limit: Int, page: Int): List<Company> {
         // Simple paging
         return CompanyData.allCompanies.drop((page - 1) * limit).take(limit)
     }
