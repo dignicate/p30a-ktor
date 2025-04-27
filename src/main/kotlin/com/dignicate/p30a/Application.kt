@@ -1,6 +1,8 @@
 package com.dignicate.p30a
 
-import com.dignicate.p30a.di.serviceModule
+import com.dignicate.p30a.controller.di.controllerModule
+import com.dignicate.p30a.data.di.dataModule
+import com.dignicate.p30a.domain.di.domainModule
 import com.dignicate.p30a.plugins.configureRouting
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
@@ -25,7 +27,9 @@ fun Application.module() {
         json()
     }
     install(Koin) {
-        modules(serviceModule)
+        modules(dataModule)
+        modules(domainModule)
+        modules(controllerModule)
     }
     install(Resources)
     configureRouting()
