@@ -2,6 +2,7 @@ package com.dignicate.p30a
 
 import com.dignicate.p30a.controller.di.controllerModule
 import com.dignicate.p30a.data.di.dataModule
+import com.dignicate.p30a.data.di.databaseModule
 import com.dignicate.p30a.domain.di.domainModule
 import com.dignicate.p30a.plugins.configureRouting
 import io.ktor.http.*
@@ -27,6 +28,7 @@ fun Application.module() {
         json()
     }
     install(Koin) {
+        modules(databaseModule)
         modules(dataModule)
         modules(domainModule)
         modules(controllerModule)
