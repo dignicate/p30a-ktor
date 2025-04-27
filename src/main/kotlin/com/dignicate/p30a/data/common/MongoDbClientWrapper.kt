@@ -3,7 +3,7 @@ package com.dignicate.p30a.data.common
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import com.mongodb.kotlin.client.coroutine.MongoCollection
-import com.mongodb.client.model.Filters // ← 必要！
+import com.mongodb.client.model.Filters
 import kotlinx.coroutines.flow.firstOrNull
 import org.bson.conversions.Bson
 
@@ -25,7 +25,7 @@ class MongoDbClientWrapper(
 
     suspend fun <T : Any> findOneById(collectionName: String, id: String, documentClass: Class<T>): T? {
         val collection = getCollection(collectionName, documentClass)
-        val filter: Bson = Filters.eq("_id", id) // ←ここ修正
+        val filter: Bson = Filters.eq("_id", id)
         return collection.find(filter).firstOrNull()
     }
 }
