@@ -48,5 +48,4 @@ class MongoDbClientWrapper(
             findFlow.toList() // 全件取得
         }
     }
-
 }

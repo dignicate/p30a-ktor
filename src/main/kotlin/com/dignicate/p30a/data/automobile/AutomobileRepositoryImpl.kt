@@ -9,25 +9,25 @@ class AutomobileRepositoryImpl(
     private val mongoDbClient: MongoDbClientWrapper
 ) : AutomobileRepository {
 
-    override suspend fun getCompanies(limit: Int, page: Int): List<Company> {
+
+    override suspend fun getCompanies(limit: Int, page: Int): Result<List<Company>> {
         return try {
-            mongoDbClient
+            val dtos = mongoDbClient
                 .findAll("company", CompanyDto::class.java, limit, page)
-                .map { it.toDomain() }
+            val companies = dtos.map { it.toDomain() }
+            Result.success(companies)
         } catch (e: Exception) {
-            println("MongoDB error: ${e.message}")
-            throw e
+            Result.failure(e)
         }
     }
 
-    override suspend fun getCountries(): List<Country> {
+    override suspend fun getCountries(): Result<List<Country>> {
         return try {
-            mongoDbClient
-                .findAll("country", CountryDto::class.java)
-                .map { it.toDomain() }
+            val dtos = mongoDbClient.findAll("country", CountryDto::class.java)
+            val countries = dtos.map { it.toDomain() }
+            Result.success(countries)
         } catch (e: Exception) {
-            println("MongoDB error: ${e.message}")
-            throw e
+            Result.failure(e)
         }
     }
 }

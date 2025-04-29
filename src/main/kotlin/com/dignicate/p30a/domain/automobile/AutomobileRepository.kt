@@ -1,8 +1,8 @@
 package com.dignicate.p30a.domain.automobile
 
 interface AutomobileRepository {
-    suspend fun getCompanies(limit: Int, page: Int): List<Company>
-    suspend fun getCountries(): List<Country>
+    suspend fun getCompanies(limit: Int, page: Int): Result<List<Company>>
+    suspend fun getCountries(): Result<List<Country>>
 }
 
 //class MockAutomobileRepository : AutomobileRepository {
