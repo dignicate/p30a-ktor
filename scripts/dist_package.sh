@@ -15,7 +15,7 @@ cd ${HERE}
 . ${HERE}/.env.sh
 
 cd ${PROJECT_HOME}
-cp -f ${PROJECT_HOME}/env/${ENV}/mongo.properties ${PROJECT_HOME}/env/mongo.properties
+cp -f ${PROJECT_HOME}/env/${ENV}/mongo.properties ${PROJECT_HOME}/src/main/resources/mongo.properties
 #gradle wrapper
 #./gradlew installDist --scan
 ./gradlew installDist

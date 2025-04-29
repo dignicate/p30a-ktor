@@ -11,12 +11,9 @@ object DatabaseConfig {
         val connection: MongoConnectionConfig
 
         init {
-            val configFile = File("env/mongo.properties")
-            if (configFile.exists()) {
-                configFile.inputStream().use { properties.load(it) }
-            } else {
-                throw RuntimeException("Properties file not found: ${configFile.absolutePath}")
-            }
+            val inputStream = this::class.java.classLoader.getResourceAsStream("mongo.properties")
+                ?: throw RuntimeException("mongo.properties not found in classpath")
+            properties.load(inputStream)
 
             val hosts = mutableListOf<MongoConnectionConfig.HostInfo>()
             for (i in 1..5) {
