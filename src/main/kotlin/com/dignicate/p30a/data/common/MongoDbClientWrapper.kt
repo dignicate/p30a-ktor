@@ -33,13 +33,20 @@ class MongoDbClientWrapper(
     suspend fun <T : Any> findAll(
         collectionName: String,
         documentClass: Class<T>,
-        limit: Int,
-        page: Int
+        limit: Int? = null,
+        page: Int? = null
     ): List<T> {
         val collection = database.getCollection(collectionName, documentClass)
-        return collection.find()
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .toList()
+        val findFlow = collection.find()
+
+        return if (limit != null && page != null) {
+            findFlow
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .toList()
+        } else {
+            findFlow.toList() // 全件取得
+        }
     }
+
 }

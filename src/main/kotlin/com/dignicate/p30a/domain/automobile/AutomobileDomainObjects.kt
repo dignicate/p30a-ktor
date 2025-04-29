@@ -22,3 +22,8 @@ data class LocalizedString(
     @SerialName("value")
     val value: String
 )
+
+data class Country(
+    val id: Int,
+    val name: List<LocalizedString>
+)

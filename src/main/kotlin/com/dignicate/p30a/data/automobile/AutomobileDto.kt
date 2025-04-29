@@ -8,3 +8,8 @@ data class CompanyDto(
     val countryId: Int,
     val foundedYear: Int
 )
+
+data class CountryDto(
+    val _id: Int,
+    val name: List<LocalizedString>
+)
