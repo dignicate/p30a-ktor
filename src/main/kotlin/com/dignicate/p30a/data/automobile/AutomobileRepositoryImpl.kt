@@ -6,15 +6,16 @@ import com.dignicate.p30a.domain.automobile.Company
 import com.dignicate.p30a.domain.automobile.Country
 
 class AutomobileRepositoryImpl(
-    private val mongoDbClient: MongoDbClientWrapper
+    private val mongoDbClient: MongoDbClientWrapper,
+    private val countryDataStore: CountryDataStore,
 ) : AutomobileRepository {
-
 
     override suspend fun getCompanies(limit: Int, page: Int): Result<List<Company>> {
         return try {
+            val allCountries = countryDataStore.getOrLoad { getCountries() }.getOrNull().orEmpty()
             val dtos = mongoDbClient
                 .findAll("company", CompanyDto::class.java, limit, page)
-            val companies = dtos.map { it.toDomain() }
+            val companies = dtos.map { it.toDomain(allCountries) }
             Result.success(companies)
         } catch (e: Exception) {
             Result.failure(e)
@@ -32,12 +33,16 @@ class AutomobileRepositoryImpl(
     }
 }
 
-private fun CompanyDto.toDomain(): Company = Company(
-    id = _id,
-    name = name,
-    country = emptyList(), // todo:
-    foundedYear = foundedYear
-)
+private fun CompanyDto.toDomain(countries: List<Country>): Company {
+    val countryRef = countries.find { it.id == countryId }?.name ?: emptyList()
+
+    return Company(
+        id = _id,
+        name = name,
+        country = countryRef,
+        foundedYear = foundedYear
+    )
+}
 
 private fun CountryDto.toDomain(): Country = Country(
     id = _id,
