@@ -44,4 +44,9 @@ dependencies {
     // Swagger UI
     implementation("io.ktor:ktor-server-swagger:$ktor_version")
     implementation("io.ktor:ktor-server-cors:$ktor_version")
+
+    // MongoDB
+    implementation(platform("org.mongodb:mongodb-driver-bom:5.4.0"))
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine")
+
 }

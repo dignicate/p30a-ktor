@@ -28,3 +28,5 @@ replay_pid*
 build/
 
 scripts/.build_no
+local.properties
+src/main/resources/mongo.properties

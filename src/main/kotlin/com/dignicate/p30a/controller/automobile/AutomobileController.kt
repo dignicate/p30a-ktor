@@ -1,11 +1,11 @@
-package com.dignicate.p30a.controller
+package com.dignicate.p30a.controller.automobile
 
+import com.dignicate.p30a.controller.ApplicationCallWrapper
+import com.dignicate.p30a.domain.automobile.Company
 import com.dignicate.p30a.domain.automobile.GetCompaniesUseCase
-import io.ktor.server.application.*
-import io.ktor.server.response.*
 
 class AutomobileController(
-    private val call: ApplicationCall,
+    private val call: ApplicationCallWrapper<List<Company>>,
     private val getCompaniesUseCase: GetCompaniesUseCase
 ) {
     suspend fun getCompanies(limit: Int, page: Int) {

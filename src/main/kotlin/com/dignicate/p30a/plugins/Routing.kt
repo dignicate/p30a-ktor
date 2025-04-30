@@ -1,6 +1,6 @@
 package com.dignicate.p30a.plugins
 
-import com.dignicate.p30a.controller.AutomobileController
+import com.dignicate.p30a.controller.automobile.AutomobileController
 import io.ktor.http.*
 import io.ktor.resources.Resource
 import io.ktor.server.application.*
