@@ -16,17 +16,23 @@ class ApplicationCallWrapper<T: Any>(
             onFailure = { exception ->
                 val status = when (exception) {
                     is IllegalArgumentException -> HttpStatusCode.BadRequest
-                    is NoSuchElementException   -> HttpStatusCode.NotFound
+                    is NoSuchElementException -> HttpStatusCode.NotFound
                     else -> HttpStatusCode.InternalServerError
                 }
 
-                val errorBody = mapOf(
-                    "error" to (exception.message ?: "Unknown error"),
-                    "status" to status.value
+                val errorBody = ErrorResponse(
+                    error = exception.message ?: "Unknown error",
+                    status = status.value
                 )
-
                 call.respond(status, errorBody)
             }
         )
     }
 }
+
+@kotlinx.serialization.Serializable
+data class ErrorResponse(
+    val error: String,
+    val status: Int
+)
+
