@@ -1,5 +1,6 @@
 package com.dignicate.p30a.plugins
 
+import com.dignicate.p30a.controller.ErrorResponse
 import com.dignicate.p30a.controller.automobile.AutomobileController
 import io.ktor.http.*
 import io.ktor.resources.Resource
@@ -8,7 +9,6 @@ import io.ktor.server.plugins.swagger.*
 import io.ktor.server.resources.get
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.core.parameter.parametersOf
 import org.koin.java.KoinJavaComponent.getKoin
 
 fun Application.configureRouting() {
@@ -16,9 +16,16 @@ fun Application.configureRouting() {
         get<Root> {
             call.respondRedirect(Url("https://freeapi.dignicate.com/swagger"))
         }
-        get<Root.Automobile.V1.Companies> { companies ->
-            val controller: AutomobileController = getKoin().get<AutomobileController> { parametersOf(call) }
-            controller.getCompanies(companies.limit, companies.page)
+        get<Root.Automobile.V1.Companies> { request ->
+            val controller: AutomobileController = getKoin().get()
+            try {
+                val companies = controller.getCompanies(request.limit, request.page)
+                call.respond(HttpStatusCode.OK, companies)
+            } catch (e: IllegalArgumentException) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponse(e.message ?: "Invalid input", 400))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, ErrorResponse("Unexpected error", 500))
+            }
         }
         swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml")
     }
