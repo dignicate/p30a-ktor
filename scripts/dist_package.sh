@@ -30,7 +30,7 @@ DATE=`date +%Y%m%d%H%M%S-`
 COMMIT=`git log --format="%H" -n 1`
 BUILD_NO=${DATE}${COMMIT}
 #echo $BUILD_NO
-mv -f com.dignicate.p30a-ktor ${BUILD_NO}
+mv -f ktor-app ${BUILD_NO}
 if [ $? -ne 0 ]; then
   echo "=== Build aborted. ==="
   exit 1
