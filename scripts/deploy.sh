@@ -39,9 +39,6 @@ else
   echo "scp -r ${BUILD_NO} p30a@${HOST}:${P30A_HOME}/release/."
   scp -r ${BUILD_NO} p30a@${HOST}:${P30A_HOME}/release/.
   sleep 1
-  echo "scp -r ${PROJECT_HOME}/openapi p30a@${HOST}:${P30A_HOME}/release/${BUILD_NO}/bin/."
-  scp -r ${PROJECT_HOME}/openapi p30a@${HOST}:${P30A_HOME}/release/${BUILD_NO}/bin/.
-  sleep 1
 fi
 
 if [ $? -ne 0 ]; then
@@ -54,9 +51,17 @@ if [ "$HOST" = "localhost" ]; then
 else
   echo "ssh ${HOST} \"rm -f ${RELEASE_HOME}/head\""
   ssh ${HOST} "rm -f ${RELEASE_HOME}/head"
+  if [ $? -ne 0 ]; then
+    echo "=== Deploy failed. ==="
+    exit 1
+  fi
   sleep 1
   echo "ssh ${HOST} \"ln -s ${RELEASE_HOME}/${BUILD_NO} ${RELEASE_HOME}/head\""
   ssh ${HOST} "ln -s ${RELEASE_HOME}/${BUILD_NO} ${RELEASE_HOME}/head"
+  if [ $? -ne 0 ]; then
+    echo "=== Deploy failed. ==="
+    exit 1
+  fi
   sleep 1
 fi
 
