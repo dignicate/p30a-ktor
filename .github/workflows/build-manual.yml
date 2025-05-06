@@ -1,0 +1,52 @@
+name: Manual Build with Env & Build No
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Target environment"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prd
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_HOME: ${{ github.workspace }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Copy mongo.properties
+        run: |
+          cp env/${{ inputs.env }}/mongo.properties src/main/resources/mongo.properties
+
+      - name: Grant Gradle permission
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew installDist
+
+      - name: Generate build number and rename folder
+        run: |
+          DATE=$(date +%Y%m%d%H%M%S-)
+          COMMIT=$(git log -1 --format="%H")
+          BUILD_NO=${DATE}${COMMIT}
+          echo "Build number: $BUILD_NO"
+          echo "$BUILD_NO" > .build_no
+          mv build/install/ktor-app build/install/$BUILD_NO
+
+      - name: Show build number
+        run: cat .build_no
