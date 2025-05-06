@@ -1,4 +1,5 @@
-name: Manual Build with Env & Build No
+# yamllint disable-line
+name: Manual Build and Deploy
 
 on:
   workflow_dispatch:
@@ -40,6 +41,7 @@ jobs:
         run: ./gradlew installDist
 
       - name: Generate build number and rename folder
+        id: build_no
         run: |
           DATE=$(date +%Y%m%d%H%M%S-)
           COMMIT=$(git log -1 --format="%H")
@@ -47,6 +49,26 @@ jobs:
           echo "Build number: $BUILD_NO"
           echo "$BUILD_NO" > .build_no
           mv build/install/ktor-app build/install/$BUILD_NO
+          echo "value=$BUILD_NO" >> $GITHUB_OUTPUT
 
-      - name: Show build number
-        run: cat .build_no
+      - name: Upload to server via SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "build/install/${{ steps.build_no.outputs.value }}"
+          target: "~/release"
+
+      - name: Deploy on remote server via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/release/${{ steps.build_no.outputs.value }}
+            docker build -t my-ktor-app:${{ steps.build_no.outputs.value }} .
+            docker stop my-ktor-app || true
+            docker rm my-ktor-app || true
+            docker run -d -p 8080:8080 --name my-ktor-app my-ktor-app:${{ steps.build_no.outputs.value }}
