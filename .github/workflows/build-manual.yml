@@ -57,7 +57,7 @@ jobs:
           cp -r build/install/${{ steps.build_no.outputs.value }}/* deploy-context/
           cp Dockerfile .dockerignore deploy-context/
 
-      - name: Upload deploy context to server
+      - name: Upload deploy context folder to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
