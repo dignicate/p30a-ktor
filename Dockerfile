@@ -5,10 +5,10 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copy all files from build/install/{project-name} into the container
-COPY build/install/<project-name>/ ./
+COPY build/install/ktor-app/ ./
 
 # Make the startup script executable (needed especially on macOS Docker)
-RUN chmod +x ./bin/<project-name>
+RUN chmod +x ./bin/ktor-app
 
 # Run the application
-ENTRYPOINT ["./bin/<project-name>"]
+ENTRYPOINT ["./bin/ktor-app"]

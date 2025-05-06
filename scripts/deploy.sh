@@ -40,7 +40,6 @@ else
   scp -r ${BUILD_NO} p30a@${HOST}:${P30A_HOME}/release/.
   sleep 1
   echo "scp -r ${PROJECT_HOME}/openapi p30a@${HOST}:${P30A_HOME}/release/${BUILD_NO}/bin/."
-  scp -r ${PROJECT_HOME}/openapi p30a@${HOST}:${P30A_HOME}/release/${BUILD_NO}/bin/.
   sleep 1
 fi
 
