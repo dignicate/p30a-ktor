@@ -51,16 +51,19 @@ jobs:
           mv build/install/ktor-app build/install/$BUILD_NO
           echo "value=$BUILD_NO" >> $GITHUB_OUTPUT
 
-      - name: Upload to server via SCP
+      - name: Prepare deploy context
+        run: |
+          mkdir -p deploy-context
+          cp -r build/install/${{ steps.build_no.outputs.value }}/* deploy-context/
+          cp Dockerfile .dockerignore deploy-context/
+
+      - name: Upload deploy context to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: |
-            build/install/${{ steps.build_no.outputs.value }}
-            Dockerfile
-            .dockerignore
+          source: "deploy-context/*"
           target: "~/release/${{ steps.build_no.outputs.value }}"
 
       - name: Deploy on remote server via SSH
