@@ -57,8 +57,11 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build/install/${{ steps.build_no.outputs.value }}"
-          target: "~/release"
+          source: |
+            build/install/${{ steps.build_no.outputs.value }}
+            Dockerfile
+            .dockerignore
+          target: "~/release/${{ steps.build_no.outputs.value }}"
 
       - name: Deploy on remote server via SSH
         uses: appleboy/ssh-action@v1.0.0
