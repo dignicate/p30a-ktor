@@ -1,3 +1,7 @@
+# ./gradlew installDist
+# docker build -t my-ktor-app .
+# docker run -p 8080:8080 my-ktor-app
+
 # Use the official Java 17 base image (eclipse-temurin is stable and recommended)
 FROM eclipse-temurin:17-jdk
 
