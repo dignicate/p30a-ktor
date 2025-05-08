@@ -40,7 +40,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew installDist
 
-      - name: Generate build number and rename folder
+      - name: Generate build number (JST) and rename folder
         id: build_no
         run: |
           export TZ=Asia/Tokyo
@@ -52,20 +52,19 @@ jobs:
           mv build/install/ktor-app build/install/$BUILD_NO
           echo "value=$BUILD_NO" >> $GITHUB_OUTPUT
 
-      - name: Prepare deploy context
+      - name: Prepare deploy target (flat structure)
         run: |
-          mkdir -p deploy-context
-          cp -r build/install/${{ steps.build_no.outputs.value }}/* deploy-context/
-          cp Dockerfile .dockerignore deploy-context/
+          mkdir -p deploy-target
+          cp -r build/install/${{ steps.build_no.outputs.value }}/* deploy-target/
+          cp Dockerfile .dockerignore deploy-target/
 
-      - name: Upload deploy context folder to server
+      - name: Upload to server (flat)
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./deploy-context"
-          strip_components: 1
+          source: "deploy-target/*"
           target: "~/release/${{ steps.build_no.outputs.value }}"
 
       - name: Deploy on remote server via SSH
