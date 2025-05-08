@@ -81,6 +81,6 @@ jobs:
             cd ~/release/${{ steps.build_no.outputs.value }}
             tar xzf deploy.tar.gz
             docker build -t my-ktor-app:${{ steps.build_no.outputs.value }} .
-            docker stop my-ktor-app || true
-            docker rm my-ktor-app || true
-            docker run -d -p 8080:8080 --name my-ktor-app my-ktor-app:${{ steps.build_no.outputs.value }}
+#            docker stop my-ktor-app || true
+#            docker rm my-ktor-app || true
+#            docker run -d -p 8080:8080 --name my-ktor-app my-ktor-app:${{ steps.build_no.outputs.value }}
