@@ -52,37 +52,21 @@ jobs:
           mv build/install/ktor-app build/install/$BUILD_NO
           echo "value=$BUILD_NO" >> $GITHUB_OUTPUT
 
-      - name: Ensure .dockerignore exists
+      - name: Prepare deploy-flat directory
         run: |
-          test -f .dockerignore || echo "# auto-generated to prevent scp-action error" > .dockerignore
+          mkdir -p deploy-flat
+          cp -r build/install/${{ steps.build_no.outputs.value }}/bin deploy-flat/
+          cp -r build/install/${{ steps.build_no.outputs.value }}/lib deploy-flat/
+          cp Dockerfile deploy-flat/
+          echo "# dummy .dockerignore" > deploy-flat/.dockerignore
 
-      - name: Upload app bin
+      - name: Upload flat structure to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build/install/${{ steps.build_no.outputs.value }}/bin"
-          target: "~/release/${{ steps.build_no.outputs.value }}"
-
-      - name: Upload app lib
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build/install/${{ steps.build_no.outputs.value }}/lib"
-          target: "~/release/${{ steps.build_no.outputs.value }}"
-
-      - name: Upload Dockerfile and dockerignore
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: |
-            Dockerfile
-            .dockerignore
+          source: "deploy-flat/*"
           target: "~/release/${{ steps.build_no.outputs.value }}"
 
       - name: Deploy on remote server via SSH
