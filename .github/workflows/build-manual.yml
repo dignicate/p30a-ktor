@@ -52,26 +52,26 @@ jobs:
           mv build/install/ktor-app build/install/$BUILD_NO
           echo "value=$BUILD_NO" >> $GITHUB_OUTPUT
 
-      - name: Prepare deploy-flat directory
+      - name: Prepare deploy-flat and tar it
         run: |
           mkdir -p deploy-flat
           cp -r build/install/${{ steps.build_no.outputs.value }}/bin deploy-flat/
           cp -r build/install/${{ steps.build_no.outputs.value }}/lib deploy-flat/
-          cp Dockerfile deploy-flat/Dockerfile
+          cp Dockerfile deploy-flat/
           echo "# dummy .dockerignore" > deploy-flat/.dockerignore
-          ls -la deploy-flat
+          cd deploy-flat
+          tar czf ../deploy.tar.gz .
 
-
-      - name: Upload flat structure to server
+      - name: Upload deploy.tar.gz to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "deploy-flat/*"
+          source: "deploy.tar.gz"
           target: "~/release/${{ steps.build_no.outputs.value }}"
 
-      - name: Deploy on remote server via SSH
+      - name: Extract and deploy on server
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -79,6 +79,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/release/${{ steps.build_no.outputs.value }}
+            tar xzf deploy.tar.gz
             docker build -t my-ktor-app:${{ steps.build_no.outputs.value }} .
             docker stop my-ktor-app || true
             docker rm my-ktor-app || true
