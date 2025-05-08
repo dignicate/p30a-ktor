@@ -57,8 +57,10 @@ jobs:
           mkdir -p deploy-flat
           cp -r build/install/${{ steps.build_no.outputs.value }}/bin deploy-flat/
           cp -r build/install/${{ steps.build_no.outputs.value }}/lib deploy-flat/
-          cp Dockerfile deploy-flat/
+          cp Dockerfile deploy-flat/Dockerfile
           echo "# dummy .dockerignore" > deploy-flat/.dockerignore
+          ls -la deploy-flat
+
 
       - name: Upload flat structure to server
         uses: appleboy/scp-action@v0.1.4
