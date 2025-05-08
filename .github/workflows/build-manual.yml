@@ -52,6 +52,10 @@ jobs:
           mv build/install/ktor-app build/install/$BUILD_NO
           echo "value=$BUILD_NO" >> $GITHUB_OUTPUT
 
+      - name: Ensure .dockerignore exists
+        run: |
+          test -f .dockerignore || echo "# auto-generated to prevent scp-action error" > .dockerignore
+
       - name: Upload app bin
         uses: appleboy/scp-action@v0.1.4
         with:
