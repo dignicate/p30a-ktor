@@ -70,15 +70,13 @@ jobs:
           source: "build/install/${{ steps.build_no.outputs.value }}/lib"
           target: "~/release/${{ steps.build_no.outputs.value }}"
 
-      - name: Upload Dockerfile and dockerignore
+      - name: Upload Dockerfile only
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: |
-            Dockerfile
-            .dockerignore
+          source: "Dockerfile"
           target: "~/release/${{ steps.build_no.outputs.value }}"
 
       - name: Deploy on remote server via SSH
