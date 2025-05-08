@@ -43,6 +43,7 @@ jobs:
       - name: Generate build number and rename folder
         id: build_no
         run: |
+          export TZ=Asia/Tokyo
           DATE=$(date +%Y%m%d%H%M%S-)
           COMMIT=$(git log -1 --format="%H")
           BUILD_NO=${DATE}${COMMIT}
@@ -63,7 +64,8 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "deploy-context/*"
+          source: "./deploy-context"
+          strip_components: 1
           target: "~/release/${{ steps.build_no.outputs.value }}"
 
       - name: Deploy on remote server via SSH
