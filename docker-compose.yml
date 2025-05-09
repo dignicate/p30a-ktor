@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: dev-mongo
+    ports:
+      - "27018:27017"  # ホストと競合しないように変更
+    networks:
+      - my-net
+
+  ktor:
+    image: my-ktor-app:latest
+    container_name: dev-ktor
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+    networks:
+      - my-net
+
+networks:
+  my-net:
