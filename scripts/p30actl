@@ -79,7 +79,8 @@ if [ "${CMD}" = "start" ]; then
   ## Start p30-ktor Server
 #  #OPTS="-Dconfig.file=conf/_${ENV}/env.conf -Dlogger.file=conf/_${ENV}/logger.xml -J-Xmx1G -J-Xms512M"
 #  #nohup ./bin/${APPNAME} ${OPTS} 1>> ${LOG} 2>&1 &
-  nohup ./com.dignicate.p30a-ktor 1>> ${LOG} 2>&1 &
+  #nohup ./com.dignicate.p30a-ktor 1>> ${LOG} 2>&1 &
+  nohup ./ktor-app 1>> ${LOG} 2>&1 &
   sleep 1
   PID=`getPid`
   status true; CODE=$?
