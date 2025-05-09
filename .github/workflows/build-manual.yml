@@ -40,9 +40,10 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew installDist
 
-      - name: Generate build number and rename folder
+      - name: Generate build number (JST) and rename folder
         id: build_no
         run: |
+          export TZ=Asia/Tokyo
           DATE=$(date +%Y%m%d%H%M%S-)
           COMMIT=$(git log -1 --format="%H")
           BUILD_NO=${DATE}${COMMIT}
@@ -51,16 +52,26 @@ jobs:
           mv build/install/ktor-app build/install/$BUILD_NO
           echo "value=$BUILD_NO" >> $GITHUB_OUTPUT
 
-      - name: Upload to server via SCP
+      - name: Prepare deploy-flat and tar it
+        run: |
+          mkdir -p deploy-flat
+          cp -r build/install/${{ steps.build_no.outputs.value }}/bin deploy-flat/
+          cp -r build/install/${{ steps.build_no.outputs.value }}/lib deploy-flat/
+          cp Dockerfile deploy-flat/
+          echo "# dummy .dockerignore" > deploy-flat/.dockerignore
+          cd deploy-flat
+          tar czf ../deploy.tar.gz .
+
+      - name: Upload deploy.tar.gz to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build/install/${{ steps.build_no.outputs.value }}"
-          target: "~/release"
+          source: "deploy.tar.gz"
+          target: "~/release/${{ steps.build_no.outputs.value }}"
 
-      - name: Deploy on remote server via SSH
+      - name: Extract and deploy on server
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -68,7 +79,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/release/${{ steps.build_no.outputs.value }}
+            tar xzf deploy.tar.gz
             docker build -t my-ktor-app:${{ steps.build_no.outputs.value }} .
-            docker stop my-ktor-app || true
-            docker rm my-ktor-app || true
-            docker run -d -p 8080:8080 --name my-ktor-app my-ktor-app:${{ steps.build_no.outputs.value }}
+            ln -sfn ~/release/${{ steps.build_no.outputs.value }} ~/release/head
+#            docker stop my-ktor-app || true
+#            docker rm my-ktor-app || true
+#            docker run -d -p 8080:8080 --name my-ktor-app my-ktor-app:${{ steps.build_no.outputs.value }}
