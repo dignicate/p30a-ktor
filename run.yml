@@ -1,0 +1,21 @@
+name: Run latest Ktor App (remote)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run latest Ktor app from 'head' on remote server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/release/head
+            docker stop my-ktor-app || true
+            docker rm my-ktor-app || true
+            docker run -d -p 8080:8080 --name my-ktor-app my-ktor-app:$(basename $(readlink ~/release/head))
