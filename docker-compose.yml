@@ -5,19 +5,29 @@ services:
     image: mongo:5.0
     container_name: dev-mongo
     ports:
-      - "27018:27017"  # ホストと競合しないように変更
+      - "27018:27017"  # ホストの 27018 → コンテナ内の 27017 に転送
+    volumes:
+      - mongo-data:/data/db
     networks:
-      - my-net
+      - app-network
 
   ktor:
     image: my-ktor-app:latest
     container_name: dev-ktor
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - mongo
+    ports:
+      - "8080:8080"
     environment:
       - MONGO_URI=mongodb://mongo:27017
     networks:
-      - my-net
+      - app-network
+
+volumes:
+  mongo-data:
 
 networks:
-  my-net:
+  app-network:
