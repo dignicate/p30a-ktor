@@ -80,6 +80,7 @@ jobs:
           script: |
             cd ~/release/${{ steps.build_no.outputs.value }}
             tar xzf deploy.tar.gz
+            rm -f deploy.tar.gz
             docker build -t my-ktor-app:${{ steps.build_no.outputs.value }} .
             ln -sfn ~/release/${{ steps.build_no.outputs.value }} ~/release/head
 #            docker stop my-ktor-app || true

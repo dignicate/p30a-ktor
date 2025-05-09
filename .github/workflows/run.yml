@@ -18,4 +18,7 @@ jobs:
             cd ~/release/head
             docker stop my-ktor-app || true
             docker rm my-ktor-app || true
-            docker run -d -p 8080:8080 --name my-ktor-app my-ktor-app:$(basename $(readlink ~/release/head))
+            docker run -d \
+              -p 8080:8080 \
+              --name my-ktor-app \
+              my-ktor-app:$(basename $(readlink ~/release/head))
