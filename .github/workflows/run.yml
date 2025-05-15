@@ -19,6 +19,6 @@ jobs:
             docker stop my-ktor-app || true
             docker rm my-ktor-app || true
             docker run -d \
-              -p 8080:8080 \
+              -p 8081:8080 \
               --name my-ktor-app \
               my-ktor-app:$(basename $(readlink ~/release/head))
