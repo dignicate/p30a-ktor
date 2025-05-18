@@ -58,6 +58,7 @@ jobs:
           cp -r build/install/${{ steps.build_no.outputs.value }}/bin deploy-flat/
           cp -r build/install/${{ steps.build_no.outputs.value }}/lib deploy-flat/
           cp Dockerfile deploy-flat/
+          cp docker-compose.yml deploy-flat/
           echo "# dummy .dockerignore" > deploy-flat/.dockerignore
           cd deploy-flat
           tar czf ../deploy.tar.gz .

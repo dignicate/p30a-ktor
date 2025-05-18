@@ -16,10 +16,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/release/head
-            docker stop my-ktor-app || true
-            docker rm my-ktor-app || true
-            docker run -d \
-              --name my-ktor-app \
-              --network=host \
-              -e PORT=8081 \
-              my-ktor-app:$(basename $(readlink ~/release/head))
+            docker compose down || true
+            docker compose up -d

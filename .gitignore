@@ -30,3 +30,7 @@ build/
 scripts/.build_no
 local.properties
 src/main/resources/mongo.properties
+
+# Ignore generated docker context directory
+/docker-context/
+
