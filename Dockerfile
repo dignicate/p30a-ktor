@@ -9,8 +9,8 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copy the application binaries and libraries
-COPY build/install/ktor-app/bin/ ./bin/
-COPY build/install/ktor-app/lib/ ./lib/
+COPY ./bin/ ./bin/
+COPY ./lib/ ./lib/
 
 # Make the startup script executable (needed especially on macOS Docker)
 RUN chmod +x ./bin/ktor-app

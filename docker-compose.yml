@@ -5,7 +5,7 @@ services:
     image: mongo:5.0
     container_name: dev-mongo
     ports:
-      - "27018:27017"  # ホストの 27018 → コンテナ内の 27017 に転送
+      - "27018:27017"
     volumes:
       - mongo-data:/data/db
     networks:
@@ -15,7 +15,7 @@ services:
     image: my-ktor-app:latest
     container_name: dev-ktor
     build:
-      context: .
+      context: ./docker-context
       dockerfile: Dockerfile
     depends_on:
       - mongo
