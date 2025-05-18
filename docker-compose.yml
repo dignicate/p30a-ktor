@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongo:
     image: mongo:5.0
@@ -15,7 +13,7 @@ services:
     image: my-ktor-app:latest
     container_name: dev-ktor
     build:
-      context: ./docker-context
+      context: .
       dockerfile: Dockerfile
     depends_on:
       - mongo
