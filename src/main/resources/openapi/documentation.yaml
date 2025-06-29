@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.1.1
 info:
   title: Free API by Dignicate,
   description: Implemented with Ktor.
   version: 1.0.0
 servers:
-#  - url: 'http://localhost:8080'
   - url: 'https://freeapi.dignicate.com'
+  - url: 'http://localhost:8080'
 paths:
   /automobile/v1/companies:
     get:

@@ -2,11 +2,7 @@
 
 ## Setup
 
-local.properties
-```
-sdk.dir=/path/to/Android/sdk
-```
-put this file in the root of your project
+- Install Docker and Docker Compose.
 
 ## 🐳 Running with Docker
 
