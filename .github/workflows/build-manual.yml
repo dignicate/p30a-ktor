@@ -12,6 +12,7 @@ on:
         options:
           - dev
           - prd
+          - prd-manual
 
 jobs:
   build:
