@@ -1,0 +1,105 @@
+#!/bin/sh
+
+APPNAME="p30a-ktor"
+
+# shellcheck disable=SC2112
+function usage() {
+  echo "[USAGE]"
+  echo '  - $1'": Command ['start', 'restart', 'stop', 'status']."
+  echo '  - $2'": Environment with 'start' or 'restart' ['prod', 'octo', 'dev']."
+  exit 1
+}
+
+
+# shellcheck disable=SC2112
+function status() {
+  isProcessing=$1
+  if [ -n "${PID}" ]; then
+    #ENV=`ps -ef | grep -v grep | grep -o -e "conf/_[a-z0-9]*" | cut -c7- | head -1`
+    VER=`ps -ef | grep -v grep | grep -o "p30a-ktor-[0-9\.]*.jar" | awk -F'p30a-ktor-|.jar' '{print $2}'`
+    BLD=`ps -ef | grep -v grep | grep -o "release/[0-9]*-[0-9a-z]*" | head -1 | cut -c9-`
+    echo "$APPNAME is running."
+    echo "  - pid: ${PID}"
+    #echo "  - env: ${ENV}"
+    echo "  - ver: ${VER}"
+    echo "  - bld: ${BLD}"
+    return 0
+  elif [ -n "${isProcessing}" ]; then
+    echo "... PLEASE WAIT."
+    return 1
+  else
+    echo "$APPNAME is NOT running."
+    return 1
+  fi
+}
+
+# shellcheck disable=SC2112
+function getPid() {
+  PID=`ps -ef | grep -v grep | grep ${APPNAME} | sed -e 's/^ *//g' | sed -e 's/  */,/g' | cut -d, -f2`
+  echo ${PID}
+}
+
+if [ $# -lt 1 ]; then
+  usage
+fi
+
+CMD=$1
+
+# Declaration
+P30A_HOME=""
+
+LOG="/var/log/${APPNAME}/p30a-ktor.out"
+if [ -z "$P30A_HOME" ]; then
+  P30A_HOME=/home/p30a
+fi
+PROJECT_HOME="${P30A_HOME}/${APPNAME}"
+RELEASE_HOME="${P30A_HOME}/release"
+RELEASE_HEAD="${RELEASE_HOME}/head"
+PID=`getPid`
+
+## under construction
+if [ "${CMD}" = "restart" ]; then
+  . $0 stop && sleep 1 && . $0 start ${ENV}
+  exit $?
+fi
+if [ "${CMD}" = "start" ]; then
+  if [ ! -d "${RELEASE_HEAD}" ]; then
+    echo "[ERROR]"
+    echo "  - '${RELEASE_HEAD}' does not exist."
+    exit 1
+  fi
+  echo "=== p30-ktor start. env: ${ENV} ===" | tee -a ${LOG}
+  echo `date` | tee -a ${LOG}
+  RELEASE_HEAD_LINK=`(cd ${RELEASE_HEAD}; pwd)`
+  RELEASE_HEAD_REAL=`dirname ${RELEASE_HEAD_LINK}`/`readlink ${RELEASE_HEAD_LINK}`
+  COUNT=`echo ${RELEASE_HOME}/ | wc -c | sed -e 's/ //g'`
+  echo "Build No: "`echo ${RELEASE_HEAD_REAL} | cut -c${COUNT}-` | tee -a ${LOG}
+  cd ${RELEASE_HEAD_LINK}/bin
+
+  ## Start p30-ktor Server
+#  #OPTS="-Dconfig.file=conf/_${ENV}/env.conf -Dlogger.file=conf/_${ENV}/logger.xml -J-Xmx1G -J-Xms512M"
+#  #nohup ./bin/${APPNAME} ${OPTS} 1>> ${LOG} 2>&1 &
+  #nohup ./com.dignicate.p30a-ktor 1>> ${LOG} 2>&1 &
+  nohup ./ktor-app 1>> ${LOG} 2>&1 &
+  sleep 1
+  PID=`getPid`
+  status true; CODE=$?
+  while [ "$CODE" -ne 0 ]; do
+    sleep 1
+    PID=`getPid`
+   status true; CODE=$?
+  done
+elif [ "${CMD}" = "stop" ]; then
+  if [ ! -n "${PID}" ]; then
+    echo "$APPNAME is NOT running."
+    exit 1
+  fi
+  kill -15 ${PID}
+  echo `date` | tee -a ${LOG}
+  echo "=== $APPNAME stop. pid: ${PID} ===" | tee -a ${LOG}
+  echo "" | tee -a ${LOG}
+elif [ "${CMD}" = "status" ]; then
+  status
+else
+  usage
+fi
