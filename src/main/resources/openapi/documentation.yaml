@@ -30,6 +30,34 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Company"
+  /redirect:
+    get:
+      description: "Redirects to specified URL after an optional delay."
+      parameters:
+        - name: "delayMs"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: 0
+            example: 1000
+        - name: "url"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            format: "uri"
+            example: "https://dignicate.com"
+
+      responses:
+        "302":
+          description: "Found"
+          headers:
+            Location:
+              description: "The URL to redirect to"
+              schema:
+                type: string
+              example: "https://dignicate.com"
 components:
   schemas:
     Company:
