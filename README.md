@@ -21,16 +21,16 @@ docker compose version
 
 主なコマンドは以下の通りです。
 
-| コマンド                                       | 説明                                                           |
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| `./scripts/devctl up`                          | 必要な Docker イメージをビルドし、サービスを起動します。       |
-| `./scripts/devctl down`                        | サービスを停止します。                                         |
-| `./scripts/devctl restart`                     | サービスを再起動します。                                       |
-| `./scripts/devctl logs`                        | サービスのログを表示します。（`-f` オプション付き）            |
-| `./scripts/devctl ps`                          | 現在のサービスの状態を表示します。                             |
-| `./scripts/devctl reset`                       | **DBデータを含む**すべてのコンテナとボリュームを削除します。   |
-| `./scripts/devctl mongo shell`                 | 実行中の MongoDB コンテナに対して `mongosh` を起動します。     |
-| `./scripts/devctl mongo exec <script.js>`      | 実行中の MongoDB コンテナで指定した JS スクリプトを実行します。|
+| コマンド                                         | 説明                                                           |
+|----------------------------------------------| -------------------------------------------------------------- |
+| `sh ./scripts/devctl up`                     | 必要な Docker イメージをビルドし、サービスを起動します。       |
+| `sh ./scripts/devctl down`                   | サービスを停止します。                                         |
+| `sh ./scripts/devctl restart`                | サービスを再起動します。                                       |
+| `sh ./scripts/devctl logs`                   | サービスのログを表示します。（`-f` オプション付き）            |
+| `sh ./scripts/devctl ps`                     | 現在のサービスの状態を表示します。                             |
+| `sh ./scripts/devctl reset`                  | **DBデータを含む**すべてのコンテナとボリュームを削除します。   |
+| `sh ./scripts/devctl mongo shell`            | 実行中の MongoDB コンテナに対して `mongosh` を起動します。     |
+| `sh ./scripts/devctl mongo exec <script.js>` | 実行中の MongoDB コンテナで指定した JS スクリプトを実行します。|
 
 ### 3. データベースの初期化
 
@@ -38,10 +38,10 @@ MongoDB に初期データを投入するには、以下のコマンドを実行
 
 ```bash
 # 国マスターデータを投入
-./scripts/devctl mongo exec scripts/db/full_insert_country_complete.js
+sh ./scripts/devctl mongo exec scripts/db/full_insert_country_complete.js
 
 # 企業マスターデータを投入
-./scripts/devctl mongo exec scripts/db/full_insert_company_complete.js
+sh ./scripts/devctl mongo exec scripts/db/full_insert_company_complete.js
 ```
 
 **注意:**

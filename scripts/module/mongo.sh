@@ -16,7 +16,7 @@ exec)
     exit 1
   fi
   SCRIPT_PATH=$1
-  docker compose exec mongo mongosh <"$SCRIPT_PATH"
+  docker compose exec -T mongo mongosh <"$SCRIPT_PATH"
   ;;
 *)
   echo "Usage: $0 mongo <shell|exec>"
