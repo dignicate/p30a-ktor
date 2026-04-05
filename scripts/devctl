@@ -42,22 +42,22 @@ main() {
     sh "${REPO_ROOT}/scripts/module/up.sh" "$@"
     ;;
   down)
-    "${REPO_ROOT}/scripts/module/down.sh" "$@"
+    sh "${REPO_ROOT}/scripts/module/down.sh" "$@"
     ;;
   restart)
-    "${REPO_ROOT}/scripts/module/restart.sh" "$@"
+    sh "${REPO_ROOT}/scripts/module/restart.sh" "$@"
     ;;
   logs)
-    "${REPO_ROOT}/scripts/module/logs.sh" "$@"
+    sh "${REPO_ROOT}/scripts/module/logs.sh" "$@"
     ;;
   ps)
-    "${REPO_ROOT}/scripts/module/ps.sh" "$@"
+    sh "${REPO_ROOT}/scripts/module/ps.sh" "$@"
     ;;
   reset)
-    "${REPO_ROOT}/scripts/module/reset.sh" "$@"
+    sh "${REPO_ROOT}/scripts/module/reset.sh" "$@"
     ;;
   mongo)
-    "${REPO_ROOT}/scripts/module/mongo.sh" "$@"
+    sh "${REPO_ROOT}/scripts/module/mongo.sh" "$@"
     ;;
   *)
     usage
