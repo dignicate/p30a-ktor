@@ -9,12 +9,17 @@ import io.ktor.server.plugins.swagger.*
 import io.ktor.server.resources.get
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.delay
 import org.koin.java.KoinJavaComponent.getKoin
 
 fun Application.configureRouting() {
     routing {
         get<Root> {
             call.respondRedirect(Url("https://freeapi.dignicate.com/swagger"))
+        }
+        get<Root.Redirect> { request ->
+            delay(request.delayMs)
+            call.respondRedirect(request.url)
         }
         get<Root.Automobile.V1.Companies> { request ->
             val controller: AutomobileController = getKoin().get()
@@ -33,6 +38,14 @@ fun Application.configureRouting() {
 
 @Resource("/")
 private class Root {
+    @Resource("/redirect")
+    class Redirect(
+        @Suppress("unused")
+        val parent: Root = Root(),
+        val delayMs: Long = 0L,
+        val url: String,
+    )
+
     @Resource("/automobile")
     class Automobile(
         @Suppress("unused")
