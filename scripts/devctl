@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+# Find the repository root
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "${REPO_ROOT}"
+
+# shellcheck disable=SC1091
+source "${REPO_ROOT}/scripts/module/common.sh"
+
+# --- Functions ---
+
+usage() {
+  echo "Usage: $0 <command> [options]"
+  echo ""
+  echo "Commands:"
+  echo "  up              Start services"
+  echo "  down            Stop services"
+  echo "  restart         Restart services"
+  echo "  logs            Follow service logs"
+  echo "  ps              Show service status"
+  echo "  reset           Stop and remove all data"
+  echo "  mongo shell     Open a MongoDB shell"
+  echo "  mongo exec      Execute a script in MongoDB"
+  echo ""
+  exit 1
+}
+
+# --- Main ---
+
+main() {
+  COMMAND=$1
+  if [ -z "$COMMAND" ]; then
+    usage
+  fi
+  shift
+
+  case $COMMAND in
+  up)
+    "${REPO_ROOT}/scripts/module/up.sh" "$@"
+    ;;
+  down)
+    "${REPO_ROOT}/scripts/module/down.sh" "$@"
+    ;;
+  restart)
+    "${REPO_ROOT}/scripts/module/restart.sh" "$@"
+    ;;
+  logs)
+    "${REPO_ROOT}/scripts/module/logs.sh" "$@"
+    ;;
+  ps)
+    "${REPO_ROOT}/scripts/module/ps.sh" "$@"
+    ;;
+  reset)
+    "${REPO_ROOT}/scripts/module/reset.sh" "$@"
+    ;;
+  mongo)
+    "${REPO_ROOT}/scripts/module/mongo.sh" "$@"
+    ;;
+  *)
+    usage
+    ;;
+  esac
+}
+
+main "$@"
