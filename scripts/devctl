@@ -39,7 +39,7 @@ main() {
 
   case $COMMAND in
   up)
-    "${REPO_ROOT}/scripts/module/up.sh" "$@"
+    sh "${REPO_ROOT}/scripts/module/up.sh" "$@"
     ;;
   down)
     "${REPO_ROOT}/scripts/module/down.sh" "$@"
