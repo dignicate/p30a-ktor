@@ -2,6 +2,7 @@ package com.dignicate.p30a.data.currenttime
 
 import com.dignicate.p30a.domain.currenttime.CurrentTime
 import com.dignicate.p30a.domain.currenttime.CurrentTimeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import java.net.URI
 import java.net.http.HttpClient
@@ -21,7 +22,9 @@ class CurrentTimeRepositoryImpl(
                 .GET()
                 .build()
 
-            val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+            val response = kotlinx.coroutines.withContext(Dispatchers.IO) {
+                httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+            }
             if (response.statusCode() !in 200..299) {
                 return Result.failure(IllegalStateException("WorldTimeAPI returned status ${response.statusCode()}"))
             }
