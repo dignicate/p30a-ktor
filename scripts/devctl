@@ -19,6 +19,7 @@ usage() {
   echo "  up              Start services"
   echo "  down            Stop services"
   echo "  restart         Restart services"
+  echo "  rebuild         Rebuild and recreate services"
   echo "  logs            Follow service logs"
   echo "  ps              Show service status"
   echo "  reset           Stop and remove all data"
@@ -46,6 +47,9 @@ main() {
     ;;
   restart)
     sh "${REPO_ROOT}/scripts/module/restart.sh" "$@"
+    ;;
+  rebuild)
+    sh "${REPO_ROOT}/scripts/module/rebuild.sh" "$@"
     ;;
   logs)
     sh "${REPO_ROOT}/scripts/module/logs.sh" "$@"
