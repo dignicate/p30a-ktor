@@ -1,4 +1,4 @@
-package com.dignicate.p30a.controller.currenttime
+package com.dignicate.p30a.controller.time
 
 @kotlinx.serialization.Serializable
 data class CurrentTimeResponse(

@@ -2,11 +2,11 @@ package com.dignicate.p30a.data.di
 
 import com.dignicate.p30a.data.automobile.AutomobileRepositoryImpl
 import com.dignicate.p30a.data.automobile.CountryDataStore
-import com.dignicate.p30a.data.currenttime.CurrentTimeRepositoryImpl
+import com.dignicate.p30a.data.time.CurrentTimeRepositoryImpl
 import com.dignicate.p30a.data.common.MongoDbClientWrapper
 import com.dignicate.p30a.data.di.config.DatabaseConfig
 import com.dignicate.p30a.domain.automobile.AutomobileRepository
-import com.dignicate.p30a.domain.currenttime.CurrentTimeRepository
+import com.dignicate.p30a.domain.time.CurrentTimeRepository
 import org.koin.dsl.module
 
 
