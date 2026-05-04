@@ -1,4 +1,6 @@
 
+import org.apache.tools.ant.filters.ReplaceTokens
+
 val kotlin_version: String by project
 val logback_version: String by project
 val ktor_version: String by project
@@ -10,7 +12,7 @@ plugins {
 }
 
 group = "com.dignicate"
-version = "0.0.1"
+version = "0.1.0"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
@@ -22,6 +24,12 @@ application {
 
 repositories {
     mavenCentral()
+}
+
+tasks.processResources {
+    filesMatching(listOf("application.yaml", "openapi/documentation.yaml")) {
+        filter<ReplaceTokens>("tokens" to mapOf("appVersion" to project.version.toString()))
+    }
 }
 
 dependencies {
