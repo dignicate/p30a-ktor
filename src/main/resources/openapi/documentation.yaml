@@ -30,6 +30,16 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Company"
+  /current-time:
+    get:
+      description: "Returns the current UTC time in multiple formats."
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CurrentTimeResponse"
   /redirect:
     get:
       description: "Redirects to specified URL after an optional delay."
@@ -81,4 +91,17 @@ components:
         language:
           type: string
         value:
+          type: string
+    CurrentTimeResponse:
+      type: object
+      properties:
+        utc:
+          type: string
+        millis:
+          type: integer
+          format: int64
+        unixSeconds:
+          type: integer
+          format: int64
+        iso8601:
           type: string
