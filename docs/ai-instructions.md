@@ -23,4 +23,4 @@ This repository provides an open API built with Kotlin and Ktor.
 - Validate input as early as practical, and keep validation rules close to the use case when they are business rules.
 - Use `suspend` for I/O paths.
 - Preserve API compatibility where possible, since this project is intended for public use.
-
+- Treat Swagger/OpenAPI as part of the public API contract. Keep route behavior and `src/main/resources/openapi/documentation.yaml` aligned.
