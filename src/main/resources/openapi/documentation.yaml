@@ -31,7 +31,7 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Company"
-  /current-time:
+  /time/v1/current:
     get:
       description: "Returns the current UTC time in multiple formats."
       responses:

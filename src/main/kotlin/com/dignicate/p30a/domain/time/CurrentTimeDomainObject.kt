@@ -1,4 +1,4 @@
-package com.dignicate.p30a.domain.currenttime
+package com.dignicate.p30a.domain.time
 
 import java.time.Instant
 

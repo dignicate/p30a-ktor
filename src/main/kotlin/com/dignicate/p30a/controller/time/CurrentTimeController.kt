@@ -1,6 +1,6 @@
-package com.dignicate.p30a.controller.currenttime
+package com.dignicate.p30a.controller.time
 
-import com.dignicate.p30a.domain.currenttime.GetCurrentTimeUseCase
+import com.dignicate.p30a.domain.time.GetCurrentTimeUseCase
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 

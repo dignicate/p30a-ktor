@@ -1,7 +1,7 @@
-package com.dignicate.p30a.data.currenttime
+package com.dignicate.p30a.data.time
 
-import com.dignicate.p30a.domain.currenttime.CurrentTime
-import com.dignicate.p30a.domain.currenttime.CurrentTimeRepository
+import com.dignicate.p30a.domain.time.CurrentTime
+import com.dignicate.p30a.domain.time.CurrentTimeRepository
 import java.time.Instant
 
 class CurrentTimeRepositoryImpl(
