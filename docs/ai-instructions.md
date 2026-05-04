@@ -24,5 +24,7 @@ This repository provides an open API built with Kotlin and Ktor.
 - Use `suspend` for I/O paths.
 - Preserve API compatibility where possible, since this project is intended for public use.
 - Treat Swagger/OpenAPI as part of the public API contract. Keep route behavior and `src/main/resources/openapi/documentation.yaml` aligned.
+- For small outbound HTTP integrations in `data`, using a direct HTTP client implementation is acceptable.
+- Introduce a shared HTTP wrapper or adapter only when multiple integrations need the same timeout, retry, logging, tracing, auth, or testing behavior.
 - Keep `plugins/Routing.kt` thin. Put endpoint handlers into feature-specific `Route` extensions under `controller`, and add new route groups there instead of growing the bootstrap file.
 - When route-level error mapping starts to repeat, move it into a shared Ktor plugin such as `StatusPages` rather than expanding individual handlers.

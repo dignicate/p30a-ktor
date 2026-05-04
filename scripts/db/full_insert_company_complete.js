@@ -1,4 +1,7 @@
-db.company.insertMany(
+const targetDb = db.getSiblingDB("p30a")
+
+targetDb.company.deleteMany({})
+targetDb.company.insertMany(
 [
   {
     "_id": 1,

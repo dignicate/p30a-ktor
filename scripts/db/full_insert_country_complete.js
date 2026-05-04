@@ -1,4 +1,7 @@
-db.country.insertMany(
+const targetDb = db.getSiblingDB("p30a")
+
+targetDb.country.deleteMany({})
+targetDb.country.insertMany(
 [
   {
     "_id": 1,
