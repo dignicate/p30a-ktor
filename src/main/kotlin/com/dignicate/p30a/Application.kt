@@ -5,6 +5,7 @@ import com.dignicate.p30a.data.di.dataModule
 import com.dignicate.p30a.data.di.databaseModule
 import com.dignicate.p30a.domain.di.domainModule
 import com.dignicate.p30a.plugins.configureRouting
+import com.dignicate.p30a.plugins.VersionHeaders
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -17,6 +18,9 @@ import org.koin.ktor.plugin.Koin
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
+
+val Application.appVersion: String
+    get() = environment.config.property("app.version").getString()
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.module() {
@@ -34,5 +38,6 @@ fun Application.module() {
         modules(controllerModule)
     }
     install(Resources)
+    install(VersionHeaders)
     configureRouting()
 }

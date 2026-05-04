@@ -4,3 +4,5 @@ ktor:
             - com.dignicate.p30a.ApplicationKt.module
     deployment:
         port: "$PORT:8080"
+app:
+    version: "@appVersion@"
